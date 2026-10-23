@@ -45,7 +45,7 @@ export function Players({ league, id }: { league: League; id?: string }) {
             </button>
           ))}
         </div>
-        <p className="count">{list.length} players, most minutes first</p>
+        <p className="count">{list.length} {list.length === 1 ? 'player' : 'players'}, most minutes first</p>
         <ol className="list">
           {list.map((e) => {
             const top = e.matches[0]
