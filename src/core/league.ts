@@ -1,5 +1,5 @@
 import { rank, type Candidate } from './match.ts'
-import { groupOf, playerProfiles, pokemonProfiles } from './profile.ts'
+import { groupOf, playerProfiles, pokemonProfiles, type Weights } from './profile.ts'
 import type { Group, Player, Pokemon, Profile } from './types.ts'
 
 export type Entry = {
@@ -21,13 +21,13 @@ export type League = {
   trainers: Map<number, Entry[]>
 }
 
-export function buildLeague(data: { season: string; fetched: string; players: Player[] }, dex: Pokemon[]): League {
-  const profiles = playerProfiles(data.players)
+export function buildLeague(data: { season: string; fetched: string; players: Player[] }, dex: Pokemon[], weights?: Weights): League {
+  const profiles = playerProfiles(data.players, weights)
   const dexProfiles = pokemonProfiles(dex)
   const entries = data.players
     .map((player) => {
       const profile = profiles.get(player.id) ?? null
-      return { player, group: groupOf(player), profile, matches: profile ? rank(profile, dex, dexProfiles) : [] }
+      return { player, group: groupOf(player), profile, matches: profile ? rank(profile, dex, dexProfiles, weights?.stats) : [] }
     })
     .sort((a, b) => b.player.minutes - a.player.minutes)
   const trainers = new Map<number, Entry[]>()

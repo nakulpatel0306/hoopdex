@@ -11,7 +11,8 @@
     "test": "bun test",
     "lint": "oxlint",
     "typecheck": "tsc -b",
-    "snapshot": "bun scripts/snapshot.ts"
+    "snapshot": "bun scripts/snapshot.ts",
+    "weights": "bun scripts/reliability.ts"
   },
   "license": "MIT",
   "dependencies": {

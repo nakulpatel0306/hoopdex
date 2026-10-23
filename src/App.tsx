@@ -1,8 +1,10 @@
 import { useEffect } from 'react'
 import { buildLeague } from './core/league'
+import type { Weights } from './core/profile'
 import type { Player, Pokemon } from './core/types'
 import players from './data/players.json'
 import pokemon from './data/pokemon.json'
+import weights from './data/weights.json'
 import { Dex } from './ui/Dex'
 import { How } from './ui/How'
 import { Players } from './ui/Players'
@@ -10,7 +12,7 @@ import { href, useRoute, type Route } from './ui/route'
 import { Teams } from './ui/Teams'
 
 // Everything is precomputed from the snapshot once; matching 600 players takes a few milliseconds
-const league = buildLeague(players as { season: string; fetched: string; players: Player[] }, pokemon as Pokemon[])
+const league = buildLeague(players as { season: string; fetched: string; players: Player[] }, pokemon as Pokemon[], weights as Weights)
 
 const TABS: { view: Route['view']; label: string }[] = [
   { view: 'players', label: 'Players' },
@@ -52,7 +54,7 @@ export default function App() {
         {route.view === 'players' && <Players league={league} id={route.id} />}
         {route.view === 'teams' && <Teams league={league} team={route.team} />}
         {route.view === 'dex' && <Dex league={league} id={route.id} />}
-        {route.view === 'how' && <How league={league} />}
+        {route.view === 'how' && <How league={league} weights={weights as Weights} />}
       </main>
     </>
   )

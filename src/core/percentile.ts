@@ -14,10 +14,11 @@ export function percentiles(values: number[]): number[] {
   })
 }
 
-// Averages several metrics' percentiles, then ranks that average, so a composite still
-// spreads evenly from 0 to 100 like a single metric does
-export function composite(columns: number[][]): number[] {
+// Averages several metrics' percentiles, weighted, then ranks that average, so a composite
+// still spreads evenly from 0 to 100 like a single metric does
+export function composite(columns: number[][], weights: number[] = columns.map(() => 1)): number[] {
   const ranked = columns.map(percentiles)
-  const mean = ranked[0].map((_, i) => ranked.reduce((sum, col) => sum + col[i], 0) / ranked.length)
+  const total = weights.reduce((a, b) => a + b, 0)
+  const mean = ranked[0].map((_, i) => ranked.reduce((sum, col, c) => sum + weights[c] * col[i], 0) / total)
   return percentiles(mean)
 }

@@ -2,18 +2,25 @@ import { describe, expect, test } from 'bun:test'
 import { buildLeague } from '../src/core/league.ts'
 import { closestAndFurthest, distance } from '../src/core/match.ts'
 import { composite, percentiles } from '../src/core/percentile.ts'
-import { MIN_MINUTES, playerProfiles, pokemonProfiles } from '../src/core/profile.ts'
-import type { Player, Pokemon } from '../src/core/types.ts'
+import { AXES, MIN_MINUTES, playerProfiles, pokemonProfiles, type Weights } from '../src/core/profile.ts'
+import { STATS, type Player, type Pokemon } from '../src/core/types.ts'
 import players from '../src/data/players.json'
 import dex from '../src/data/pokemon.json'
+import fitted from '../src/data/weights.json'
 
-const league = buildLeague(players as { season: string; fetched: string; players: Player[] }, dex as Pokemon[])
+const weights = fitted as Weights
+const league = buildLeague(players as { season: string; fetched: string; players: Player[] }, dex as Pokemon[], weights)
 const dexProfiles = pokemonProfiles(dex as Pokemon[])
 
 describe('percentiles', () => {
   test('spread evenly and share the middle on ties', () => {
     expect(percentiles([10, 20, 30, 40])).toEqual([12.5, 37.5, 62.5, 87.5])
     expect(percentiles([5, 5, 5])).toEqual([50, 50, 50])
+  })
+
+  test('a weighted composite leans toward the heavier metric', () => {
+    // Metric A ranks them 1-2-3-4, metric B the reverse; tripling A's weight keeps A's order
+    expect(composite([[1, 2, 3, 4], [4, 3, 2, 1]], [3, 1])).toEqual([12.5, 37.5, 62.5, 87.5])
   })
 
   test('a composite averages each metric rank, then ranks the average', () => {
@@ -46,17 +53,32 @@ describe('player profiles', () => {
 })
 
 describe('matching', () => {
-  test('every best match is the closest Pokémon in the whole Pokédex on all six stats', () => {
+  test('every best match is the closest Pokémon in the whole Pokédex on all six weighted stats', () => {
     for (const e of league.entries) {
       if (!e.profile) continue
-      const best = Math.min(...(dex as Pokemon[]).map((p) => distance(e.profile!, dexProfiles.get(p.id)!)))
+      const best = Math.min(...(dex as Pokemon[]).map((p) => distance(e.profile!, dexProfiles.get(p.id)!, weights.stats)))
       expect(e.matches[0].distance).toBe(best)
     }
   })
 
-  test('every stat counts: a gap on Defense costs the same as a gap on Speed', () => {
+  test('unweighted, a gap on Defense costs the same as a gap on Speed', () => {
     const base = { hp: 50, attack: 50, defense: 50, spAtk: 50, spDef: 50, speed: 50 }
     expect(distance(base, { ...base, defense: 80 })).toBe(distance(base, { ...base, speed: 80 }))
+  })
+
+  test('a heavier stat costs more for the same gap, and every stat still counts', () => {
+    const base = { hp: 50, attack: 50, defense: 50, spAtk: 50, spDef: 50, speed: 50 }
+    const w = { hp: 0.5, attack: 1.5, defense: 1, spAtk: 1, spDef: 1, speed: 1 }
+    expect(distance(base, { ...base, attack: 80 }, w)).toBeGreaterThan(distance(base, { ...base, hp: 80 }, w))
+    expect(distance(base, { ...base, hp: 80 }, w)).toBeGreaterThan(0)
+  })
+
+  test('the fitted weights cover every metric and stat, all positive', () => {
+    for (const s of STATS) {
+      expect(weights.metrics[s]).toHaveLength(AXES[s].metrics.length)
+      for (const r of weights.metrics[s]) expect(r).toBeGreaterThan(0)
+      expect(weights.stats[s]).toBeGreaterThan(0)
+    }
   })
 
   test('one big miss costs more than the same total spread evenly', () => {

@@ -1,9 +1,10 @@
 import type { League } from '../core/league'
+import type { Weights } from '../core/profile'
 import { AXES, MIN_MINUTES } from '../core/profile'
 import { STATS } from '../core/types'
 import { STAT_NAMES } from './format'
 
-export function How({ league }: { league: League }) {
+export function How({ league, weights }: { league: League; weights: Weights }) {
   const qualified = league.entries.filter((e) => e.profile).length
   return (
     <article className="how">
@@ -28,6 +29,7 @@ export function How({ league }: { league: League }) {
             <th scope="col">Stat</th>
             <th scope="col">Skill</th>
             <th scope="col">Measured by</th>
+            <th scope="col">Weight</th>
           </tr>
         </thead>
         <tbody>
@@ -36,6 +38,7 @@ export function How({ league }: { league: League }) {
               <th scope="row">{STAT_NAMES[s]}</th>
               <td>{AXES[s].skill}</td>
               <td>{AXES[s].metrics.map((m) => m.label).join(', ')}</td>
+              <td>×{weights.stats[s].toFixed(2)}</td>
             </tr>
           ))}
         </tbody>
@@ -52,14 +55,28 @@ export function How({ league }: { league: League }) {
         have the stat boosts they got in Generation VI.
       </p>
 
-      <h2>The closest Pokémon across all six stats wins</h2>
+      <h2>Steadier numbers count for more</h2>
       <p>
-        Every player is compared with all 493 Pokémon on HP, Attack, Defense, Sp. Atk, Sp. Def and Speed at once, and
-        every stat counts the same. The Pokémon with the smallest average gap wins. Big gaps are punished more than small
-        ones, so a Pokémon that's close everywhere beats one that's perfect on five stats and way off on the sixth.
+        Some stats say a lot about a player; others swing with one season's luck. Hoopdex measures how well each metric
+        holds up from one season to the next for the same players, and weights it by that. Assist rate and rebound rates
+        are very steady, so they count the most. True shooting and minutes played (injuries) move around more, so they count
+        for less. The same goes for the six stats in the match: the Weight column shows how much each one
+        counts.
       </p>
       <p>
-        The fit score is 100 minus that average gap. A 90 means the two sit within about ten percentile points of each
+        The weights were only kept because they passed a test: fitted on one pair of seasons and checked on another, they
+        made players' profiles about 3% steadier from season to season, and their Pokémon more likely to still be a top-10
+        match a year later.
+      </p>
+
+      <h2>The closest Pokémon across all six stats wins</h2>
+      <p>
+        Every player is compared with all 493 Pokémon on HP, Attack, Defense, Sp. Atk, Sp. Def and Speed at once. The
+        Pokémon with the smallest weighted average gap wins. Big gaps are punished more than small ones, so a Pokémon that's
+        close everywhere beats one that's perfect on five stats and way off on the sixth.
+      </p>
+      <p>
+        The fit score is 100 minus that weighted average gap. A 90 means the two sit within about ten percentile points of each
         other on every stat.
       </p>
 
