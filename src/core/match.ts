@@ -2,15 +2,19 @@ import { STATS, type Pokemon, type Profile, type Stat } from './types.ts'
 
 export type Candidate = { pokemon: Pokemon; profile: Profile; distance: number; fit: number }
 
-// Root-mean-square gap across all six stats, in percentile points. Every stat counts the
-// same, so a Pokémon has to resemble the whole player, not just their best skill.
-export const distance = (a: Profile, b: Profile) => Math.sqrt(STATS.reduce((sum, s) => sum + (a[s] - b[s]) ** 2, 0) / STATS.length)
+// Root-mean-square gap across all six stats, in percentile points. All six always count, so a
+// Pokémon has to resemble the whole player; the weights let steadier skills count a bit more.
+export function distance(a: Profile, b: Profile, weights?: Record<Stat, number>): number {
+  const w = (s: Stat) => weights?.[s] ?? 1
+  const total = STATS.reduce((sum, s) => sum + w(s), 0)
+  return Math.sqrt(STATS.reduce((sum, s) => sum + w(s) * (a[s] - b[s]) ** 2, 0) / total)
+}
 
-export function rank(player: Profile, dex: Pokemon[], profiles: Map<number, Profile>): Candidate[] {
+export function rank(player: Profile, dex: Pokemon[], profiles: Map<number, Profile>, weights?: Record<Stat, number>): Candidate[] {
   return dex
     .map((pokemon) => {
       const profile = profiles.get(pokemon.id)!
-      const d = distance(player, profile)
+      const d = distance(player, profile, weights)
       return { pokemon, profile, distance: d, fit: Math.round(100 - d) }
     })
     .sort((a, b) => a.distance - b.distance)

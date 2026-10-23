@@ -62,18 +62,28 @@ export const AXES: Record<Stat, { skill: string; metrics: { label: string; value
   },
 }
 
+/**
+ * Fitted by scripts/reliability.ts from how steady each measure is from one season to the next.
+ * `metrics` weights each metric inside its skill (same order as AXES); `stats` weights each skill
+ * in the match. Steadier measures say more about the player and less about one season's luck.
+ */
+export type Weights = {
+  metrics: Record<Stat, number[]>
+  stats: Record<Stat, number>
+}
+
 export const qualified = (players: Player[], group: Group) =>
   players.filter((p) => GROUPS[group].includes(p.pos) && p.minutes >= MIN_MINUTES)
 
 // Ranks each qualified player against their own position group, so a forward's
 // 67th-percentile defense means better than two thirds of forwards, not of everyone
-export function playerProfiles(players: Player[]): Map<string, Profile> {
+export function playerProfiles(players: Player[], weights?: Weights): Map<string, Profile> {
   const out = new Map<string, Profile>()
   for (const name of Object.keys(GROUPS) as Group[]) {
     const group = qualified(players, name)
     if (group.length === 0) continue
     const ranks = Object.fromEntries(
-      STATS.map((stat) => [stat, composite(AXES[stat].metrics.map((m) => group.map(m.value)))]),
+      STATS.map((stat) => [stat, composite(AXES[stat].metrics.map((m) => group.map(m.value)), weights?.metrics[stat])]),
     ) as Record<Stat, number[]>
     group.forEach((p, i) => out.set(p.id, Object.fromEntries(STATS.map((s) => [s, ranks[s][i]])) as Profile))
   }
