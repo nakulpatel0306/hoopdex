@@ -885,7 +885,8 @@ small {
   }
 
   .tabs a {
-    padding: 0.35rem 0.6rem;
+    padding: 0.3rem 0.45rem;
+    font-size: 0.88rem;
   }
 
   .screen {
@@ -956,6 +957,565 @@ small {
   }
 
   .side .bar {
+    transition: none;
+  }
+}
+
+/* Games */
+
+.games h1,
+.game h1 {
+  font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+}
+
+.tally {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  margin: 1.25rem 0 0.5rem;
+  padding: 0.6rem 1rem;
+  background: var(--panel);
+  border: 2px solid var(--ink);
+  border-radius: 10px;
+  box-shadow: 4px 4px 0 var(--ink);
+}
+
+.tally strong {
+  font: 700 1.8rem/1 var(--display);
+  color: var(--mon);
+}
+
+.day h2 {
+  font-size: 1.1rem;
+  margin: 2rem 0 0.6rem;
+}
+
+.game-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+  gap: 0.6rem;
+}
+
+.game-list a {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.6rem 0.9rem;
+  background: var(--panel);
+  border: 2px solid var(--ink);
+  border-radius: 10px;
+  text-decoration: none;
+}
+
+.game-list a:hover {
+  box-shadow: 4px 4px 0 var(--ink);
+}
+
+.score {
+  display: flex;
+  flex-direction: column;
+  font-family: var(--display);
+  font-size: 1.05rem;
+  min-width: 90px;
+}
+
+.score span {
+  color: var(--ink-soft);
+}
+
+.score .won {
+  color: var(--ink);
+}
+
+.battle-result {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-weight: 700;
+  text-align: right;
+}
+
+.battle-result > span {
+  display: flex;
+  flex-direction: column;
+}
+
+.battle-result.none {
+  font-weight: 400;
+  color: var(--ink-soft);
+}
+
+.agree {
+  color: #2f7d32;
+}
+
+.upset {
+  color: var(--mon);
+}
+
+.back {
+  display: inline-block;
+  margin-bottom: 0.75rem;
+  font-weight: 700;
+}
+
+.line-score {
+  border-collapse: collapse;
+  margin: 1.25rem 0;
+  background: var(--panel);
+  border: 2px solid var(--ink);
+  min-width: min(100%, 480px);
+}
+
+.line-score caption {
+  text-align: left;
+  font: 700 0.95rem var(--display);
+  padding-bottom: 0.4rem;
+}
+
+.line-score th,
+.line-score td {
+  padding: 0.4rem 0.7rem;
+  border-bottom: 1px solid var(--line);
+  text-align: center;
+}
+
+.line-score th[scope='row'] {
+  text-align: left;
+}
+
+.line-score .final {
+  font: 700 1.1rem var(--display);
+}
+
+.line-score tr.won th,
+.line-score tr.won .final {
+  color: var(--player);
+}
+
+/* The battle screen: a DS-era field, opponent top right, your side from behind bottom left */
+
+.replay {
+  margin: 1rem 0;
+}
+
+.field {
+  position: relative;
+  overflow: hidden;
+  border: 3px solid var(--ink);
+  border-radius: 14px;
+  box-shadow: 6px 6px 0 var(--ink);
+  background: linear-gradient(#cfe7f5 0 42%, #e9f1c4 42% 43%, #b9d993 43% 100%);
+  max-width: 1000px;
+  aspect-ratio: 16 / 9;
+}
+
+.combatant .info {
+  position: absolute;
+  z-index: 2;
+  width: min(44%, 340px);
+  padding: 0.5rem 0.8rem;
+  background: var(--panel);
+  border: 3px solid var(--ink);
+  border-radius: 12px;
+  box-shadow: 3px 3px 0 rgba(27, 38, 32, 0.25);
+}
+
+.combatant.away .info {
+  left: 4%;
+  top: 6%;
+}
+
+.combatant.home .info {
+  right: 4%;
+  bottom: 27%;
+}
+
+.info-name {
+  display: flex;
+  justify-content: space-between;
+  font: 700 1.15rem var(--display);
+}
+
+.info-player {
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+}
+
+.hp {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.3rem;
+  font: 700 0.75rem var(--display);
+  color: #c58a12;
+}
+
+.hp-track {
+  height: 10px;
+  background: #485868;
+  border: 2px solid var(--ink);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.hp-track i {
+  display: block;
+  height: 100%;
+  transition: width 500ms ease-out, background-color 300ms;
+}
+
+.hp-track .good {
+  background: #48c050;
+}
+
+.hp-track .warn {
+  background: #f0c020;
+}
+
+.hp-track .low {
+  background: #e04838;
+}
+
+.hp-num {
+  text-align: right;
+  font: 600 0.85rem var(--display);
+}
+
+.balls {
+  display: flex;
+  gap: 4px;
+  margin-top: 0.35rem;
+}
+
+.balls span {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  border: 1.5px solid var(--ink);
+  background: linear-gradient(var(--mon) 0 45%, var(--ink) 45% 55%, #fff 55%);
+}
+
+.balls span.used {
+  background: #b9c2bc;
+  opacity: 0.6;
+}
+
+.stage-mon {
+  position: absolute;
+  display: grid;
+  place-items: end center;
+}
+
+.combatant.away .stage-mon {
+  right: 8%;
+  top: 4%;
+  width: 34%;
+  height: 46%;
+}
+
+.combatant.home .stage-mon {
+  left: 4%;
+  bottom: 21%;
+  width: 40%;
+  height: 52%;
+}
+
+.pad {
+  position: absolute;
+  bottom: 0;
+  left: 5%;
+  right: 5%;
+  height: 26%;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at 50% 40%, #d8e8a8, #98c070 70%);
+}
+
+.mon-sprite {
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 6%;
+}
+
+.mon-sprite .sprite {
+  width: min(100%, 230px);
+  height: auto;
+}
+
+.combatant.away .mon-sprite .sprite {
+  width: min(90%, 200px);
+}
+
+.stage-mon.gone .mon-sprite {
+  opacity: 0;
+}
+
+.mon-sprite.hit {
+  animation: hit 600ms steps(1) both;
+}
+
+.mon-sprite.lunge {
+  animation: lunge 360ms ease-out both;
+}
+
+.combatant.away .mon-sprite.lunge {
+  animation-name: lunge-back;
+}
+
+.mon-sprite.sent {
+  animation: send-out 420ms steps(6, end) both;
+}
+
+.mon-sprite.faint {
+  animation: faint 600ms ease-in both;
+}
+
+@keyframes hit {
+  0%, 40%, 80% { opacity: 0.15 }
+  20%, 60%, 100% { opacity: 1 }
+}
+
+@keyframes lunge {
+  50% { transform: translate(14px, -10px) }
+}
+
+@keyframes lunge-back {
+  50% { transform: translate(-14px, 10px) }
+}
+
+@keyframes faint {
+  to { transform: translateY(60%); opacity: 0 }
+}
+
+.textbox {
+  position: absolute;
+  z-index: 3;
+  left: 2%;
+  right: 2%;
+  bottom: 3%;
+  min-height: 19%;
+  padding: 0.9rem 1.2rem;
+  background: var(--panel);
+  border: 4px solid var(--ink);
+  border-radius: 14px;
+  box-shadow: inset 0 0 0 4px #a8b8c8;
+  display: flex;
+  align-items: center;
+}
+
+.textbox p {
+  margin: 0;
+  font: 600 clamp(0.95rem, 2.2vw, 1.35rem) var(--display);
+}
+
+.replay-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.replay-controls button {
+  padding: 0.35rem 0.9rem;
+  border: 2px solid var(--ink);
+  border-radius: 8px;
+  background: var(--panel);
+  font-weight: 700;
+}
+
+.replay-controls button[aria-pressed='true'] {
+  background: var(--ink);
+  color: var(--panel);
+}
+
+.replay-controls button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.progress {
+  margin-left: auto;
+  font: 600 0.95rem var(--display);
+  color: var(--ink-soft);
+}
+
+.verdict {
+  font: 700 1.1rem var(--display);
+  margin: 1rem 0 0;
+}
+
+.match-stats h2,
+.party-table h2 {
+  font-size: 1.3rem;
+  margin: 2rem 0 0.75rem;
+}
+
+.mvp {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem 1rem;
+  background: var(--panel);
+  border: 2px solid var(--ink);
+  border-radius: 12px;
+  margin-bottom: 1rem;
+  max-width: 640px;
+}
+
+.mvp > div {
+  display: flex;
+  flex-direction: column;
+}
+
+.mvp .label {
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+}
+
+.mvp strong {
+  font: 700 1.5rem var(--display);
+  color: var(--mon);
+}
+
+.versus {
+  width: 100%;
+  max-width: 640px;
+  border-collapse: collapse;
+  background: var(--panel);
+  border: 2px solid var(--ink);
+}
+
+.versus th,
+.versus td {
+  padding: 0.45rem 0.8rem;
+  border-bottom: 1px solid var(--line);
+  text-align: center;
+}
+
+.versus td {
+  font: 700 1.1rem var(--display);
+}
+
+.versus thead th {
+  font: 700 1.1rem var(--display);
+  border-bottom: 2px solid var(--ink);
+}
+
+.versus tbody th {
+  font-weight: 400;
+  color: var(--ink-soft);
+}
+
+.table-wrap {
+  overflow-x: auto;
+  border: 2px solid var(--ink);
+  border-radius: 10px;
+  background: var(--panel);
+}
+
+.party-table table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+.party-table th,
+.party-table td {
+  padding: 0.4rem 0.7rem;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+  white-space: nowrap;
+}
+
+.party-table thead th {
+  border-bottom: 2px solid var(--ink);
+  font-family: var(--display);
+}
+
+.party-table td.mon {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-weight: 700;
+  color: var(--mon);
+}
+
+.party-table tr.fainted td {
+  color: var(--ink-soft);
+}
+
+.party-table tr.fainted .sprite {
+  filter: grayscale(1);
+  opacity: 0.6;
+}
+
+@media (max-width: 640px) {
+  .game-list {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .field {
+    aspect-ratio: 4 / 5;
+  }
+
+  .combatant .info {
+    width: 60%;
+    padding: 0.35rem 0.55rem;
+  }
+
+  .combatant.home .info {
+    bottom: 25%;
+  }
+
+  .info-name {
+    font-size: 0.95rem;
+  }
+
+  .combatant.away .stage-mon {
+    right: 2%;
+    top: 20%;
+    width: 46%;
+    height: 26%;
+  }
+
+  .combatant.home .stage-mon {
+    left: 0;
+    bottom: 22%;
+    width: 52%;
+    height: 30%;
+  }
+
+  .progress {
+    margin-left: 0;
+    width: 100%;
+  }
+
+  .combatant.home .mon-sprite .sprite {
+    width: min(78%, 150px);
+  }
+
+  .combatant.away .mon-sprite .sprite {
+    width: min(78%, 120px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mon-sprite.hit,
+  .mon-sprite.lunge,
+  .mon-sprite.sent,
+  .mon-sprite.faint {
+    animation: none;
+  }
+
+  .hp-track i {
     transition: none;
   }
 }
