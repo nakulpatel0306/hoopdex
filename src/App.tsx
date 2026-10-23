@@ -6,6 +6,7 @@ import players from './data/players.json'
 import pokemon from './data/pokemon.json'
 import weights from './data/weights.json'
 import { Dex } from './ui/Dex'
+import { Games } from './ui/Games'
 import { How } from './ui/How'
 import { Players } from './ui/Players'
 import { href, useRoute, type Route } from './ui/route'
@@ -17,6 +18,7 @@ const league = buildLeague(players as { season: string; fetched: string; players
 const TABS: { view: Route['view']; label: string }[] = [
   { view: 'players', label: 'Players' },
   { view: 'teams', label: 'Teams' },
+  { view: 'games', label: 'Games' },
   { view: 'dex', label: 'Pokédex' },
   { view: 'how', label: 'How it works' },
 ]
@@ -53,6 +55,7 @@ export default function App() {
       <main className="screen">
         {route.view === 'players' && <Players league={league} id={route.id} />}
         {route.view === 'teams' && <Teams league={league} team={route.team} />}
+        {route.view === 'games' && <Games league={league} id={route.id} />}
         {route.view === 'dex' && <Dex league={league} id={route.id} />}
         {route.view === 'how' && <How league={league} weights={weights as Weights} />}
       </main>

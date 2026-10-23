@@ -12,6 +12,7 @@
     "lint": "oxlint",
     "typecheck": "tsc -b",
     "snapshot": "bun scripts/snapshot.ts",
+    "games": "bun scripts/games.ts",
     "weights": "bun scripts/reliability.ts"
   },
   "license": "MIT",

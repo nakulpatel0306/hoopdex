@@ -1,11 +1,12 @@
 import type { Pokemon, PokemonType } from '../core/types'
 
 // Platinum's DS sprites, to match the gen 1-4 cutoff
-const spriteUrl = (id: number) =>
-  `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-iv/platinum/${id}.png`
+const spriteUrl = (id: number, back: boolean) =>
+  `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-iv/platinum/${back ? 'back/' : ''}${id}.png`
 
-export function Sprite({ pokemon, size = 80 }: { pokemon: Pokemon; size?: number }) {
-  return <img className="sprite" src={spriteUrl(pokemon.id)} alt={pokemon.name} width={size} height={size} loading="lazy" />
+// `back` is the view of your own Pokémon in a battle
+export function Sprite({ pokemon, size = 80, back = false }: { pokemon: Pokemon; size?: number; back?: boolean }) {
+  return <img className="sprite" src={spriteUrl(pokemon.id, back)} alt={pokemon.name} width={size} height={size} loading="lazy" />
 }
 
 const TYPE_COLORS: Record<PokemonType, string> = {

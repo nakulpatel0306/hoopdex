@@ -47,3 +47,31 @@ export type Stat = (typeof STATS)[number]
 
 // Percentile ranks, 0-100, for each Pokémon stat
 export type Profile = Record<Stat, number>
+
+/** One player's line from a real box score */
+export type BoxLine = {
+  id: string
+  name: string
+  minutes: number
+  pts: number
+  trb: number
+  ast: number
+  gameScore: number
+}
+
+export type GameSide = {
+  team: string
+  pts: number
+  periods: number[]
+  box: BoxLine[]
+}
+
+/** A real game this season, from its Basketball-Reference box score */
+export type Game = {
+  id: string
+  date: string
+  home: GameSide
+  away: GameSide
+  overtimes: string
+  arena: string
+}
