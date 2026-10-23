@@ -1,0 +1,961 @@
+:root {
+  --shell: #c8323a;
+  --shell-deep: #9a2027;
+  --screen: #dde6da;
+  --panel: #f5f7f3;
+  --ink: #1b2620;
+  --ink-soft: #536259;
+  --line: #bccabb;
+  --player: #1f4f9e;
+  --mon: #c8323a;
+  --note: #e3a81b;
+  --note-wash: #f7e7b8;
+  --display: 'Chakra Petch', system-ui, sans-serif;
+  --body: 'Atkinson Hyperlegible Next', system-ui, sans-serif;
+  color-scheme: light;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--screen);
+  color: var(--ink);
+  font: 16px/1.5 var(--body);
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--display);
+  line-height: 1.1;
+  margin: 0;
+}
+
+a {
+  color: inherit;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+
+:focus-visible {
+  outline: 3px solid var(--player);
+  outline-offset: 2px;
+}
+
+small {
+  color: var(--ink-soft);
+  font-size: 0.8em;
+}
+
+.sprite {
+  image-rendering: pixelated;
+  display: block;
+}
+
+.meta {
+  color: var(--ink-soft);
+  margin: 0.4rem 0 0;
+  max-width: 68ch;
+}
+
+.empty {
+  color: var(--ink-soft);
+  padding: 1rem;
+}
+
+/* The shell: a Pokédex lid, red with its blue lens and three status lights */
+
+.shell {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 0.6rem 1.5rem;
+  background: var(--shell);
+  border-bottom: 6px solid var(--shell-deep);
+  color: #fff;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font: 700 1.6rem var(--display);
+  text-decoration: none;
+  letter-spacing: 0.02em;
+}
+
+.lens {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 32%, #bfe0ff 0 14%, #2e7dd1 15% 100%);
+  border: 4px solid #f5f7f3;
+  box-shadow: 0 0 0 2px var(--ink);
+}
+
+.lights {
+  display: flex;
+  gap: 5px;
+  align-self: flex-start;
+  margin-top: 2px;
+}
+
+.lights i {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 1.5px solid var(--ink);
+  background: #ef5350;
+}
+
+.lights i:nth-child(2) {
+  background: #f6c945;
+}
+
+.lights i:nth-child(3) {
+  background: #5fb85b;
+}
+
+.tabs {
+  display: flex;
+  gap: 0.25rem;
+  margin-left: auto;
+}
+
+.tabs a {
+  white-space: nowrap;
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.tabs a:hover {
+  background: var(--shell-deep);
+}
+
+.tabs a[aria-current='page'] {
+  background: var(--panel);
+  color: var(--ink);
+}
+
+.screen {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 1.5rem;
+}
+
+/* Shared controls */
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.filters button {
+  border: 1.5px solid var(--ink);
+  background: transparent;
+  padding: 0.2rem 0.7rem;
+  border-radius: 999px;
+  font-size: 0.9rem;
+}
+
+.filters button[aria-checked='true'] {
+  background: var(--ink);
+  color: var(--panel);
+}
+
+.search {
+  width: 100%;
+  padding: 0.6rem 0.8rem;
+  border: 2px solid var(--ink);
+  border-radius: 8px;
+  background: var(--panel);
+  font: inherit;
+}
+
+.types {
+  display: inline-flex;
+  gap: 0.3rem;
+}
+
+.type {
+  color: #fff;
+  font: 600 0.75rem var(--display);
+  padding: 0.1rem 0.55rem;
+  border-radius: 4px;
+  text-transform: capitalize;
+  text-shadow: 0 1px 0 rgb(0 0 0 / 0.35);
+}
+
+.dexno {
+  font: 600 0.95rem var(--display);
+  color: var(--ink-soft);
+}
+
+/* Players: roster list beside the match card */
+
+.players {
+  display: grid;
+  grid-template-columns: 340px minmax(0, 1fr);
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.roster {
+  position: sticky;
+  top: 90px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  max-height: calc(100vh - 110px);
+}
+
+.count {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+}
+
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+  border-top: 2px solid var(--ink);
+}
+
+.list a {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.3rem 0.4rem;
+  border-bottom: 1px solid var(--line);
+  text-decoration: none;
+}
+
+.list a:hover {
+  background: var(--panel);
+}
+
+.list a[aria-current='page'] {
+  background: var(--ink);
+  color: var(--panel);
+}
+
+.list a[aria-current='page'] .sub,
+.list a[aria-current='page'] .mon {
+  color: var(--line);
+}
+
+.who {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.name {
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sub {
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+}
+
+.mon {
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+  flex-shrink: 0;
+}
+
+.mon.none {
+  font-style: italic;
+}
+
+/* Match card */
+
+.card {
+  background: var(--panel);
+  border: 2px solid var(--ink);
+  border-radius: 14px;
+  padding: 1.75rem;
+  box-shadow: 6px 6px 0 var(--ink);
+}
+
+.card-head h1 {
+  font-size: clamp(2rem, 4vw, 3rem);
+  color: var(--player);
+}
+
+.reveal {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 1.5rem;
+  margin: 1.5rem 0 1rem;
+}
+
+.reveal-art {
+  display: grid;
+  place-items: center;
+  width: 196px;
+  height: 196px;
+  border-radius: 50%;
+  background: var(--screen);
+  border: 3px solid var(--ink);
+  animation: send-out 420ms steps(6, end) both;
+}
+
+/* The one entrance on the page: the Pokémon pops out like it left a Poké Ball */
+@keyframes send-out {
+  from {
+    transform: scale(0.2);
+    filter: brightness(4);
+  }
+  to {
+    transform: scale(1);
+    filter: none;
+  }
+}
+
+.reveal-text h2 {
+  font-size: clamp(2rem, 4vw, 2.75rem);
+  color: var(--mon);
+}
+
+.genus {
+  margin: 0.15rem 0 0.5rem;
+  color: var(--ink-soft);
+}
+
+.fit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 2px solid var(--ink);
+  border-radius: 10px;
+  padding: 0.4rem 0.9rem;
+}
+
+.fit strong {
+  font: 700 2.4rem/1 var(--display);
+}
+
+.fit span {
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+}
+
+.summary {
+  max-width: 72ch;
+  padding: 0.75rem 1rem;
+  border-left: 5px solid var(--note);
+  background: var(--note-wash);
+  margin: 0 0 1.5rem;
+}
+
+/* The mirror chart */
+
+.mirror {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.mirror-head,
+.mirror-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 150px minmax(0, 1fr);
+  align-items: center;
+}
+
+.mirror-head {
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+  padding-bottom: 0.25rem;
+}
+
+.mirror-head span:first-child {
+  text-align: right;
+  padding-right: 0.5rem;
+}
+
+.mirror-head span:last-child {
+  padding-left: 0.5rem;
+}
+
+.side {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  height: 34px;
+}
+
+.side.left {
+  justify-content: flex-end;
+}
+
+.track {
+  flex: 1;
+  height: 100%;
+  display: flex;
+}
+
+.side.left .track {
+  justify-content: flex-end;
+}
+
+.side .bar {
+  height: 100%;
+  min-width: 3px;
+  transition: width 300ms ease;
+}
+
+.side.left .bar {
+  background: var(--player);
+  border-radius: 6px 0 0 6px;
+}
+
+.side.right .bar {
+  background: var(--mon);
+  border-radius: 0 6px 6px 0;
+}
+
+.pct {
+  font: 600 1rem var(--display);
+  white-space: nowrap;
+}
+
+.side.left .pct {
+  min-width: 3.2em;
+  text-align: right;
+}
+
+.side.right .pct {
+  min-width: 7.5em;
+}
+
+.pct small {
+  font-family: var(--body);
+}
+
+.spine {
+  height: 100%;
+  border: 0;
+  border-inline: 2px solid var(--ink);
+  background: var(--panel);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  line-height: 1.15;
+}
+
+.spine:hover {
+  background: var(--screen);
+}
+
+.spine .skill {
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.spine .stat {
+  font-size: 0.75rem;
+  color: var(--ink-soft);
+}
+
+
+
+
+.mirror-detail dl {
+  margin: 0 0 0.5rem;
+  padding: 0.6rem 1rem;
+  background: var(--screen);
+  border-radius: 8px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 0.3rem 1.5rem;
+}
+
+.mirror-detail dl div {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.mirror-detail dt {
+  color: var(--ink-soft);
+}
+
+.mirror-detail dd {
+  margin: 0;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.runners {
+  margin-top: 1.75rem;
+}
+
+.runners h3 {
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+}
+
+.runners ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  gap: 0.5rem;
+}
+
+.runners button {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0.4rem;
+  border: 2px solid var(--line);
+  border-radius: 10px;
+  background: transparent;
+}
+
+.runners button:hover {
+  border-color: var(--ink);
+}
+
+.runners button.on {
+  border-color: var(--mon);
+  background: #fbe9ea;
+}
+
+.runners button span {
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+/* Teams */
+
+.teams h1,
+.dex h1,
+.how h1 {
+  font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+}
+
+.team-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  margin-bottom: 1.5rem;
+}
+
+.team-picker a {
+  font: 600 0.85rem var(--display);
+  text-decoration: none;
+  padding: 0.2rem 0.45rem;
+  border: 1.5px solid var(--ink);
+  border-radius: 5px;
+}
+
+.team-picker a[aria-current='page'] {
+  background: var(--ink);
+  color: var(--panel);
+}
+
+.parties {
+  list-style: none;
+  padding: 0;
+  margin: 1.25rem 0 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+  gap: 0.75rem;
+}
+
+.parties a {
+  display: block;
+  padding: 0.75rem 1rem;
+  background: var(--panel);
+  border: 2px solid var(--ink);
+  border-radius: 10px;
+  text-decoration: none;
+}
+
+.parties a:hover {
+  box-shadow: 4px 4px 0 var(--ink);
+}
+
+.team-name {
+  font: 700 1.05rem var(--display);
+}
+
+.parties .row {
+  display: flex;
+  margin-top: 0.25rem;
+}
+
+.party-grid {
+  list-style: none;
+  padding: 0;
+  margin: 1.5rem 0 2rem;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.party-grid a {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 1rem;
+  background: var(--panel);
+  border: 2px solid var(--ink);
+  border-radius: 12px;
+  text-decoration: none;
+  text-align: center;
+}
+
+.party-grid a:hover {
+  box-shadow: 4px 4px 0 var(--ink);
+}
+
+.mon-name {
+  font: 700 1.1rem var(--display);
+  color: var(--mon);
+}
+
+.player-name {
+  font-weight: 700;
+  color: var(--player);
+}
+
+.party h2,
+.trainers h2 {
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+}
+
+.bench {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 0.25rem 1rem;
+}
+
+.bench a {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  text-decoration: none;
+}
+
+.bench a:hover span {
+  text-decoration: underline;
+}
+
+/* Pokédex */
+
+.dex-controls {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.dex-grid {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(112px, 1fr));
+  gap: 0.4rem;
+}
+
+.dex-grid a {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0.4rem 0.3rem 0.5rem;
+  background: var(--panel);
+  border: 1.5px solid var(--line);
+  border-radius: 8px;
+  text-decoration: none;
+}
+
+.dex-grid a:hover,
+.dex-grid a[aria-current='page'] {
+  border-color: var(--ink);
+}
+
+.dex-grid a.unmatched .sprite {
+  filter: grayscale(1);
+  opacity: 0.55;
+}
+
+.dex-grid .mon-name {
+  font-size: 0.85rem;
+  color: var(--ink);
+}
+
+.dex-grid .dexno {
+  font-size: 0.75rem;
+}
+
+.badge {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  min-width: 22px;
+  padding: 0 5px;
+  border-radius: 999px;
+  background: var(--player);
+  color: #fff;
+  font: 700 0.75rem/22px var(--display);
+  text-align: center;
+}
+
+.entry {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1.2fr) minmax(0, 1fr);
+  gap: 1.5rem;
+  align-items: start;
+  background: var(--panel);
+  border: 2px solid var(--ink);
+  border-radius: 14px;
+  box-shadow: 6px 6px 0 var(--ink);
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.entry h1 {
+  color: var(--mon);
+}
+
+.base {
+  border-collapse: collapse;
+  margin-top: 0.75rem;
+  width: 100%;
+}
+
+.base th {
+  text-align: left;
+  font-weight: 600;
+  padding-right: 0.75rem;
+  white-space: nowrap;
+}
+
+.base td {
+  padding: 0.15rem 0.4rem;
+}
+
+.base td:nth-child(2) {
+  font: 700 1rem var(--display);
+  text-align: right;
+}
+
+.base td:nth-child(3) {
+  width: 100%;
+}
+
+.base .bar {
+  display: block;
+  height: 12px;
+  background: var(--mon);
+  border-radius: 0 4px 4px 0;
+}
+
+.base td:last-child {
+  color: var(--ink-soft);
+  font-size: 0.85rem;
+}
+
+
+.trainers ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.trainers li a {
+  display: block;
+  padding: 0.25rem 0;
+  border-bottom: 1px solid var(--line);
+  text-decoration: none;
+  font-weight: 700;
+  color: var(--player);
+}
+
+.trainers li a small {
+  font-weight: 400;
+}
+
+/* How it works */
+
+.how {
+  max-width: 72ch;
+}
+
+.how h2 {
+  font-size: 1.35rem;
+  margin: 2rem 0 0.5rem;
+}
+
+.how p {
+  margin: 0.5rem 0;
+}
+
+.axes {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0.75rem 0;
+  background: var(--panel);
+}
+
+.axes th,
+.axes td {
+  text-align: left;
+  padding: 0.45rem 0.6rem;
+  border-bottom: 1px solid var(--line);
+  vertical-align: top;
+}
+
+.axes thead th {
+  border-bottom: 2px solid var(--ink);
+}
+
+
+@media (max-width: 900px) {
+  .players {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .roster {
+    position: static;
+    max-height: 340px;
+  }
+
+  .entry {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .shell {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+  }
+
+  .tabs {
+    margin-left: 0;
+    width: 100%;
+    overflow-x: auto;
+  }
+
+  .tabs a {
+    padding: 0.35rem 0.6rem;
+  }
+
+  .screen {
+    padding: 1rem;
+  }
+
+  .card {
+    padding: 1rem;
+    box-shadow: 4px 4px 0 var(--ink);
+  }
+
+  .reveal {
+    grid-template-columns: auto 1fr;
+    gap: 1rem;
+  }
+
+  .reveal-art {
+    width: 120px;
+    height: 120px;
+  }
+
+  .reveal-art .sprite {
+    width: 112px;
+    height: 112px;
+  }
+
+  .fit {
+    grid-column: 1 / -1;
+    flex-direction: row;
+    gap: 0.5rem;
+    justify-self: start;
+  }
+
+  .fit strong {
+    font-size: 1.6rem;
+  }
+
+  .mirror-head,
+  .mirror-row {
+    grid-template-columns: minmax(0, 1fr) 92px minmax(0, 1fr);
+  }
+
+  .pct small {
+    display: none;
+  }
+
+  .pct {
+    font-size: 0.85rem;
+  }
+
+  .side.left .pct,
+  .side.right .pct {
+    min-width: 2.8em;
+  }
+
+  .party-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .parties {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal-art {
+    animation: none;
+  }
+
+  .side .bar {
+    transition: none;
+  }
+}
