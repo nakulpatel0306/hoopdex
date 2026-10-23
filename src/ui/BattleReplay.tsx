@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import type { Battle, Battler } from '../core/battle'
 import { TEAMS } from '../core/teams'
 import type { Game } from '../core/types'
-import { Sprite } from './pokemon'
+import { Sprite, spriteUrl } from './pokemon'
 
 type Side = 'home' | 'away'
 
@@ -61,6 +61,11 @@ export function BattleReplay({ battle, game, onFinish }: { battle: Battle; game:
   const [fast, setFast] = useState(false)
   const step = timeline[at]
   const done = at === timeline.length - 1
+
+  // Load every sprite in both lineups up front, so a Pokémon sent out later appears at once
+  useEffect(() => {
+    for (const b of [...battle.away, ...battle.home]) new Image().src = spriteUrl(b.pokemon.id, b.side === 'home')
+  }, [battle])
 
   useEffect(() => {
     if (done) onFinish()
@@ -135,7 +140,7 @@ function Combatant({ side, battle, step, at, team }: { side: Side; battle: Battl
       <div className={`stage-mon ${out && !fx ? 'gone' : ''}`}>
         <div className="pad" />
         <div key={`${i}-${at}-${fx}`} className={`mon-sprite ${fx}`}>
-          <Sprite pokemon={b.pokemon} size={side === 'home' ? 192 : 160} back={side === 'home'} />
+          <Sprite pokemon={b.pokemon} size={side === 'home' ? 192 : 160} back={side === 'home'} eager />
         </div>
       </div>
     </div>
