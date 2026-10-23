@@ -1,0 +1,31 @@
+{
+  "name": "hoopdex",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "description": "Every NBA player as a Pokémon",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview",
+    "test": "bun test",
+    "lint": "oxlint",
+    "typecheck": "tsc -b",
+    "snapshot": "bun scripts/snapshot.ts"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1"
+  },
+  "devDependencies": {
+    "@types/bun": "^1.4.4",
+    "@types/node": "^26.6.5",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.1.2",
+    "oxlint": "^1.89.0",
+    "typescript": "~6.0.2",
+    "vite": "^8.3.5"
+  }
+}
