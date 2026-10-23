@@ -1,12 +1,23 @@
 import type { Pokemon, PokemonType } from '../core/types'
 
 // Platinum's DS sprites, to match the gen 1-4 cutoff
-const spriteUrl = (id: number, back: boolean) =>
+export const spriteUrl = (id: number, back = false) =>
   `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-iv/platinum/${back ? 'back/' : ''}${id}.png`
 
-// `back` is the view of your own Pokémon in a battle
-export function Sprite({ pokemon, size = 80, back = false }: { pokemon: Pokemon; size?: number; back?: boolean }) {
-  return <img className="sprite" src={spriteUrl(pokemon.id, back)} alt={pokemon.name} width={size} height={size} loading="lazy" />
+// `back` is the view of your own Pokémon in a battle. `eager` is for sprites that get re-created
+// mid-animation, which would otherwise start blank while a lazy image waits to load.
+export function Sprite({ pokemon, size = 80, back = false, eager = false }: { pokemon: Pokemon; size?: number; back?: boolean; eager?: boolean }) {
+  return (
+    <img
+      className="sprite"
+      src={spriteUrl(pokemon.id, back)}
+      alt={pokemon.name}
+      width={size}
+      height={size}
+      loading={eager ? 'eager' : 'lazy'}
+      decoding={eager ? 'sync' : 'async'}
+    />
+  )
 }
 
 const TYPE_COLORS: Record<PokemonType, string> = {
