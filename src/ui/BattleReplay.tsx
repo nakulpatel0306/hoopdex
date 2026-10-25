@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import type { Battle, Battler } from '../core/battle'
 import { TEAMS } from '../core/teams'
 import type { Game } from '../core/types'
+import { prefersStill } from './motion'
 import { Sprite, spriteUrl } from './pokemon'
 
 type Side = 'home' | 'away'
@@ -51,8 +52,6 @@ function steps(battle: Battle, game: Game): Step[] {
   out.push(snap(`The ${short(game[battle.winner].team)} won the battle!`))
   return out
 }
-
-const prefersStill = () => typeof matchMedia !== 'undefined' && matchMedia('(prefers-reduced-motion: reduce)').matches
 
 export function BattleReplay({ battle, game, onFinish }: { battle: Battle; game: Game; onFinish: () => void }) {
   const timeline = useMemo(() => steps(battle, game), [battle, game])

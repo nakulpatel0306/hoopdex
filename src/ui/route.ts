@@ -1,8 +1,9 @@
 import { useSyncExternalStore } from 'react'
 
 // Hash routes keep deep links working on GitHub Pages, which has no server-side rewrites:
-// #/player/<id>, #/teams, #/team/<abbr>, #/games, #/game/<id>, #/dex, #/dex/<id>, #/how
+// #/, #/players, #/player/<id>, #/teams, #/team/<abbr>, #/games, #/game/<id>, #/dex, #/dex/<id>, #/how
 export type Route =
+  | { view: 'home' }
   | { view: 'players'; id?: string }
   | { view: 'teams'; team?: string }
   | { view: 'games'; id?: string }
@@ -11,17 +12,21 @@ export type Route =
 
 export function parse(hash: string): Route {
   const [view, arg] = hash.replace(/^#\/?/, '').split('/')
-  if (view === 'teams' || view === 'team') return { view: 'teams', team: arg }
-  if (view === 'games' || view === 'game') return { view: 'games', id: arg }
+  if (view === 'players') return { view: 'players' }
+  if (view === 'player') return { view: 'players', id: arg || undefined }
+  if (view === 'teams' || view === 'team') return { view: 'teams', team: arg || undefined }
+  if (view === 'games' || view === 'game') return { view: 'games', id: arg || undefined }
   if (view === 'dex') return { view: 'dex', id: arg ? Number(arg) : undefined }
   if (view === 'how') return { view: 'how' }
-  return { view: 'players', id: view === 'player' ? arg : undefined }
+  return { view: 'home' }
 }
 
 export const href = (route: Route): string => {
   switch (route.view) {
+    case 'home':
+      return '#/'
     case 'players':
-      return route.id ? `#/player/${route.id}` : '#/'
+      return route.id ? `#/player/${route.id}` : '#/players'
     case 'teams':
       return route.team ? `#/team/${route.team}` : '#/teams'
     case 'games':

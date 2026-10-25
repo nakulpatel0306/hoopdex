@@ -17,3 +17,6 @@ export function ordinal(pct: number): string {
   const suffix = tens >= 11 && tens <= 13 ? 'th' : ['th', 'st', 'nd', 'rd'][n % 10] ?? 'th'
   return `${n}${suffix}`
 }
+
+// Accents and case shouldn't stop "jokic" finding Jokić
+export const fold = (s: string) => s.normalize('NFD').replace(/\p{Diacritic}/gu, '').toLowerCase()

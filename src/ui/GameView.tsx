@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, type CSSProperties } from 'react'
 import type { Battle, Battler } from '../core/battle'
 import { TEAMS } from '../core/teams'
 import type { Game } from '../core/types'
@@ -6,6 +6,7 @@ import { BattleReplay } from './BattleReplay'
 import { mvpOf, type Played } from './Games'
 import { Sprite } from './pokemon'
 import { href } from './route'
+import { teamColor } from './teamColors'
 
 const SIDES = ['away', 'home'] as const
 
@@ -20,30 +21,30 @@ export function GameView({ played }: { played: Played }) {
         All games
       </a>
       <header className="game-head">
-        <h1>
+        <h1 className="visually-hidden">
           {TEAMS[game.away.team]} at {TEAMS[game.home.team]}
         </h1>
+        <Scoreboard game={game} />
         <p className="meta">
           {new Date(`${game.date}T12:00:00`).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}, {game.arena}
         </p>
       </header>
 
-      <LineScore game={game} />
-
       {battle ? (
         <>
           <BattleReplay key={game.id} battle={battle} game={game} onFinish={() => setFinished(true)} />
           {finished ? (
-            <>
+            <div className="aftermath">
               <p className={`verdict ${battle.winner === realWinner ? 'agree' : 'upset'}`}>
+                <strong>{battle.winner === realWinner ? 'Called it' : 'Upset!'}</strong>
                 {TEAMS[game[battle.winner].team]} won the battle in {battle.turns} turns.{' '}
-                {battle.winner === realWinner ? 'Same result as the real game.' : `An upset: ${TEAMS[game[realWinner].team]} won the real game.`}
+                {battle.winner === realWinner ? 'Same result as the real game.' : `${TEAMS[game[realWinner].team]} won the real game.`}
               </p>
               <MatchStats battle={battle} game={game} />
               {SIDES.map((side) => (
                 <PartyTable key={side} team={game[side].team} members={battle[side]} />
               ))}
-            </>
+            </div>
           ) : (
             <p className="meta">The result and match stats show up when the battle ends, or skip to the result.</p>
           )}
@@ -55,34 +56,53 @@ export function GameView({ played }: { played: Played }) {
   )
 }
 
-function LineScore({ game }: { game: Game }) {
+// The real result up top, team colors and all, with the quarters underneath
+function Scoreboard({ game }: { game: Game }) {
   const periods = Math.max(game.home.periods.length, game.away.periods.length)
+  const label = (i: number) => (i < 4 ? `Q${i + 1}` : `OT${periods > 5 ? i - 3 : ''}`)
   return (
-    <table className="line-score">
-      <caption>Real final score</caption>
-      <thead>
-        <tr>
-          <th scope="col">Team</th>
-          {Array.from({ length: periods }, (_, i) => (
-            <th scope="col" key={i}>
-              {i < 4 ? `Q${i + 1}` : `OT${periods > 5 ? i - 3 : ''}`}
+    <div className="scoreboard">
+      {SIDES.map((side) => {
+        const won = game[side].pts > game[side === 'home' ? 'away' : 'home'].pts
+        return (
+          <a
+            key={side}
+            href={href({ view: 'teams', team: game[side].team })}
+            className={`sb-team ${side} ${won ? 'won' : ''}`}
+            style={{ '--team': teamColor(game[side].team) } as CSSProperties}
+          >
+            <span className="sb-code">{game[side].team}</span>
+            <span className="sb-name">{TEAMS[game[side].team]}</span>
+            <span className="sb-pts">{game[side].pts}</span>
+          </a>
+        )
+      })}
+      <table className="line-score">
+        <caption>Final{game.overtimes ? ` (${game.overtimes})` : ''}</caption>
+        <thead>
+          <tr>
+            <th scope="col">
+              <span className="visually-hidden">Team</span>
             </th>
-          ))}
-          <th scope="col">Final</th>
-        </tr>
-      </thead>
-      <tbody>
-        {SIDES.map((side) => (
-          <tr key={side} className={game[side].pts > game[side === 'home' ? 'away' : 'home'].pts ? 'won' : ''}>
-            <th scope="row">{TEAMS[game[side].team]}</th>
-            {game[side].periods.map((p, i) => (
-              <td key={i}>{p}</td>
+            {Array.from({ length: periods }, (_, i) => (
+              <th scope="col" key={i}>
+                {label(i)}
+              </th>
             ))}
-            <td className="final">{game[side].pts}</td>
           </tr>
-        ))}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {SIDES.map((side) => (
+            <tr key={side}>
+              <th scope="row">{game[side].team}</th>
+              {game[side].periods.map((p, i) => (
+                <td key={i}>{p}</td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   )
 }
 
@@ -162,8 +182,10 @@ function PartyTable({ team, members }: { team: string; members: Battler[] }) {
             {members.map((b) => (
               <tr key={b.player.id} className={b.hp <= 0 ? 'fainted' : ''}>
                 <td className="mon">
-                  <Sprite pokemon={b.pokemon} size={40} />
-                  {b.pokemon.name}
+                  <span>
+                    <Sprite pokemon={b.pokemon} size={40} />
+                    {b.pokemon.name}
+                  </span>
                 </td>
                 <td>
                   <a href={href({ view: 'players', id: b.player.id })}>{b.player.name}</a>

@@ -1,0 +1,261 @@
+/* Teams: thirty parties, each in its team's color */
+
+.parties-page h1,
+.party-head h1 {
+  font-size: clamp(1.9rem, 4vw, 2.8rem);
+}
+
+.parties {
+  list-style: none;
+  padding: 0;
+  margin: 1.5rem 0 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 0.9rem;
+}
+
+.parties a {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 0.9rem 1rem 0.6rem;
+  background: linear-gradient(var(--team) 0 8px, var(--panel) 8px);
+  border: 2px solid var(--ink);
+  border-radius: 14px;
+  text-decoration: none;
+  transition: transform 200ms var(--pop), box-shadow 200ms var(--pop);
+}
+
+.parties a:hover {
+  transform: translate(-3px, -3px);
+  box-shadow: 6px 6px 0 var(--ink);
+}
+
+.team-name {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font: 700 1.05rem var(--display);
+}
+
+.team-name b {
+  padding: 0 0.4rem;
+  border-radius: 5px;
+  background: var(--team);
+  color: #fff;
+  font-size: 0.85rem;
+}
+
+.parties .row {
+  display: flex;
+  justify-content: space-between;
+}
+
+.parties a:hover .sprite {
+  animation: hop 420ms ease-out;
+}
+
+.parties a:hover .sprite:nth-child(2) { animation-delay: 50ms }
+.parties a:hover .sprite:nth-child(3) { animation-delay: 100ms }
+.parties a:hover .sprite:nth-child(4) { animation-delay: 150ms }
+.parties a:hover .sprite:nth-child(5) { animation-delay: 200ms }
+.parties a:hover .sprite:nth-child(6) { animation-delay: 250ms }
+
+/* One team: a header in its color, then the party laid out like the Gen IV party screen */
+
+.party-head {
+  position: relative;
+  padding: 1.25rem 1.5rem 1.4rem;
+  border: 2px solid var(--ink);
+  border-radius: 16px;
+  background: var(--team);
+  color: #fff;
+  box-shadow: 6px 6px 0 var(--ink);
+}
+
+.party-head .back {
+  color: #fff;
+  opacity: 0.85;
+}
+
+.party-head .meta {
+  color: rgb(255 255 255 / 0.85);
+}
+
+.party-step {
+  position: absolute;
+  top: 1.1rem;
+  right: 1.25rem;
+  display: flex;
+  gap: 0.4rem;
+}
+
+.party-step a {
+  padding: 0.25rem 0.7rem;
+  border: 1.5px solid rgb(255 255 255 / 0.6);
+  border-radius: 999px;
+  font: 600 0.85rem var(--display);
+  text-decoration: none;
+  transition: background 150ms;
+}
+
+.party-step a:hover {
+  background: rgb(255 255 255 / 0.18);
+}
+
+.party-grid {
+  list-style: none;
+  padding: 0;
+  margin: 1.5rem 0 2rem;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.9rem;
+}
+
+.party-grid li {
+  animation: enter 400ms calc(var(--slot) * 70ms) ease-out both;
+}
+
+.party-grid a {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  height: 100%;
+  padding: 0.75rem 1.1rem 0.75rem 0.75rem;
+  background: var(--panel);
+  border: 2px solid var(--ink);
+  border-radius: 999px 18px 18px 999px;
+  text-decoration: none;
+  transition: transform 200ms var(--pop), box-shadow 200ms var(--pop);
+}
+
+.party-grid a:hover {
+  transform: translate(-3px, -3px);
+  box-shadow: 6px 6px 0 var(--ink);
+}
+
+.party-grid a.lead {
+  background: color-mix(in srgb, var(--team) 14%, var(--panel));
+  border-color: var(--team);
+}
+
+.slot-art {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 108px;
+  height: 108px;
+  border-radius: 50%;
+  border: 2px solid var(--ink);
+  background: radial-gradient(circle, #fff 0 45%, #eef2ec 46%);
+}
+
+.party-grid a:hover .sprite {
+  animation: hop 420ms ease-out;
+}
+
+.slot-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  min-width: 0;
+  flex: 1;
+}
+
+.mpg {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.25rem;
+  font: 700 0.75rem var(--display);
+  color: #c58a12;
+}
+
+.mpg span:last-child {
+  color: var(--ink);
+}
+
+.mpg-track {
+  height: 9px;
+  background: #485868;
+  border: 2px solid var(--ink);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.mpg-track i {
+  display: block;
+  height: 100%;
+  background: #48c050;
+  transform-origin: left;
+  animation: grow 700ms 300ms var(--pop) both;
+}
+
+.party h2 {
+  font-size: 1.25rem;
+  margin-bottom: 0.6rem;
+}
+
+.bench {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 0.5rem;
+}
+
+.bench a {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.3rem 0.75rem 0.3rem 0.4rem;
+  background: var(--panel);
+  border: 1.5px solid var(--line);
+  border-radius: 12px;
+  text-decoration: none;
+  transition: border-color 150ms;
+}
+
+.bench a:hover {
+  border-color: var(--ink);
+}
+
+.bench span {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.25;
+}
+
+@media (max-width: 760px) {
+  .party-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .party-step {
+    position: static;
+    margin-top: 0.9rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .parties {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .parties .sprite {
+    width: 46px;
+    height: 46px;
+  }
+
+  .slot-art {
+    width: 84px;
+    height: 84px;
+  }
+
+  .slot-art .sprite {
+    width: 80px;
+    height: 80px;
+  }
+}
