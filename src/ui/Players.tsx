@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 import type { League } from '../core/league'
 import type { Group } from '../core/types'
+import { fold } from './format'
 import { MatchCard } from './MatchCard'
 import { Sprite } from './pokemon'
 import { href } from './route'
@@ -11,9 +12,6 @@ const FILTERS: { value: Group | 'all'; label: string }[] = [
   { value: 'forwards', label: 'Forwards' },
   { value: 'centers', label: 'Centers' },
 ]
-
-// Accents and case shouldn't stop "jokic" finding Jokić
-const fold = (s: string) => s.normalize('NFD').replace(/\p{Diacritic}/gu, '').toLowerCase()
 
 export function Players({ league, id }: { league: League; id?: string }) {
   const [query, setQuery] = useState('')
@@ -28,7 +26,8 @@ export function Players({ league, id }: { league: League; id?: string }) {
   }, [league, query, group])
 
   return (
-    <div className="players">
+    // On a phone there's only room for one: the list until a player is picked, then their card
+    <div className={`players ${id ? 'picked' : ''}`}>
       <aside className="roster" aria-label="Players">
         <input
           className="search"

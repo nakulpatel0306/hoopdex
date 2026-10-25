@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useMemo, type CSSProperties } from 'react'
 import { simulate, type Battle } from '../core/battle'
 import type { League } from '../core/league'
 import { TEAMS } from '../core/teams'
@@ -7,6 +7,7 @@ import { GameView } from './GameView'
 import { useSeason } from './season'
 import { Sprite } from './pokemon'
 import { href } from './route'
+import { teamColor } from './teamColors'
 
 export type Played = { game: Game; battle: Battle | null }
 
@@ -37,7 +38,7 @@ export function Games({ league, id }: { league: League; id?: string }) {
 
   return (
     <div className="games">
-      <h1>Every game as a Pokémon battle</h1>
+      <h1 className="page-title">Every game as a Pokémon battle</h1>
       <p className="meta">
         Each real {season.season} game, replayed as a battle between the two teams' Pokémon. Each side fields the six
         players who played the most minutes that night, and each Pokémon hits harder or softer with its player's real Game
@@ -62,7 +63,7 @@ export function Games({ league, id }: { league: League; id?: string }) {
                     <a href={href({ view: 'games', id: game.id })}>
                       <span className="score">
                         {(['away', 'home'] as const).map((side) => (
-                          <span key={side} className={side === real ? 'won' : ''}>
+                          <span key={side} className={side === real ? 'won' : ''} style={{ '--team': teamColor(game[side].team) } as CSSProperties}>
                             <b>{game[side].team}</b> {game[side].pts}
                           </span>
                         ))}

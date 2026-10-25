@@ -1,0 +1,220 @@
+/* Pokédex: an entry up top when one is picked, then all 493 */
+
+.dex-controls {
+  position: sticky;
+  top: 66px;
+  z-index: 5;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0 -0.5rem 1rem;
+  padding: 0.6rem 0.5rem;
+  background: rgb(221 230 218 / 0.92);
+  backdrop-filter: blur(6px);
+}
+
+.toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-weight: 600;
+}
+
+.toggle input {
+  width: 1.1rem;
+  height: 1.1rem;
+  accent-color: var(--mon);
+}
+
+.dex-grid {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(116px, 1fr));
+  gap: 0.5rem;
+}
+
+.dex-grid a {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0.4rem 0.3rem 0.55rem;
+  background: var(--panel);
+  border: 1.5px solid var(--line);
+  border-radius: 12px;
+  text-decoration: none;
+  transition: transform 180ms var(--pop), border-color 150ms, box-shadow 180ms var(--pop);
+}
+
+.dex-grid a:hover {
+  border-color: var(--ink);
+  transform: translateY(-3px);
+  box-shadow: 0 4px 0 var(--ink);
+}
+
+.dex-grid a:hover .sprite {
+  animation: hop 420ms ease-out;
+}
+
+.dex-grid a[aria-current='page'] {
+  border: 2px solid var(--mon);
+  background: #fbe9ea;
+}
+
+.dex-grid a.unmatched .sprite {
+  filter: grayscale(1);
+  opacity: 0.5;
+}
+
+.dex-grid a.unmatched:hover .sprite {
+  filter: none;
+  opacity: 1;
+}
+
+.dex-grid .mon-name {
+  font-size: 0.85rem;
+  color: var(--ink);
+}
+
+.dex-grid .dexno {
+  font-size: 0.75rem;
+}
+
+.badge {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  min-width: 22px;
+  padding: 0 5px;
+  border-radius: 999px;
+  background: var(--player);
+  color: #fff;
+  font: 700 0.75rem/22px var(--display);
+  text-align: center;
+}
+
+.entry {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1.2fr) minmax(0, 1fr);
+  gap: 1.75rem;
+  align-items: start;
+  background: var(--panel);
+  border: 2px solid var(--ink);
+  border-radius: 16px;
+  box-shadow: 6px 6px 0 var(--ink);
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  animation: enter 350ms ease-out both;
+}
+
+.entry-art {
+  display: grid;
+  place-items: center;
+  width: 188px;
+  height: 188px;
+  border-radius: 50%;
+  border: 3px solid var(--ink);
+  background: var(--screen) radial-gradient(var(--screen-dot) 1px, transparent 1.5px) 0 0 / 8px 8px;
+}
+
+.entry-art .sprite {
+  animation: send-out 450ms steps(6, end) both;
+}
+
+.entry h1 {
+  font-size: clamp(2rem, 4vw, 2.8rem);
+  color: var(--mon);
+}
+
+.base {
+  border-collapse: collapse;
+  margin-top: 0.75rem;
+  width: 100%;
+}
+
+.base th {
+  text-align: left;
+  font-weight: 600;
+  padding-right: 0.75rem;
+  white-space: nowrap;
+}
+
+.base td {
+  padding: 0.15rem 0.4rem;
+}
+
+.base td:nth-child(2) {
+  font: 700 1rem var(--display);
+  text-align: right;
+}
+
+.base td:nth-child(3) {
+  width: 100%;
+}
+
+.base .bar {
+  display: block;
+  height: 12px;
+  background: var(--mon);
+  border-radius: 0 6px 6px 0;
+  transform-origin: left;
+  animation: grow 600ms 200ms var(--pop) both;
+}
+
+.base td:last-child {
+  color: var(--ink-soft);
+  font-size: 0.85rem;
+}
+
+.trainers h2 {
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+}
+
+.trainers ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.trainers li a {
+  display: block;
+  padding: 0.35rem 0.5rem;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 700;
+  color: var(--player);
+}
+
+.trainers li a:hover {
+  background: var(--screen);
+}
+
+.trainers li a small {
+  font-weight: 400;
+}
+
+@media (max-width: 900px) {
+  .entry {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .dex-controls {
+    top: 50px;
+  }
+
+  .dex-grid {
+    grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
+  }
+
+  .entry-art {
+    width: 140px;
+    height: 140px;
+  }
+}

@@ -23,7 +23,7 @@ export function Dex({ league, id }: { league: League; id?: number }) {
 
   return (
     <div className="dex">
-      {selected && <Entry league={league} id={selected.id} />}
+      {selected && <Entry key={selected.id} league={league} id={selected.id} />}
       <div className="dex-controls">
         <div className="filters" role="radiogroup" aria-label="Generation">
           <button role="radio" aria-checked={gen === 0} onClick={() => setGen(0)}>
@@ -65,7 +65,9 @@ function Entry({ league, id }: { league: League; id: number }) {
   const trainers = [...(league.trainers.get(id) ?? [])].sort((a, b) => b.matches[0].fit - a.matches[0].fit)
   return (
     <section className="entry">
-      <Sprite pokemon={pokemon} size={160} />
+      <span className="entry-art">
+        <Sprite pokemon={pokemon} size={160} eager />
+      </span>
       <div>
         <span className="dexno">{dexNo(pokemon.id)}</span>
         <h1>{pokemon.name}</h1>

@@ -1,0 +1,58 @@
+/* How it works: one readable column */
+
+.how {
+  max-width: 72ch;
+  margin: 0 auto;
+}
+
+.how h1 {
+  font-size: clamp(1.9rem, 4vw, 2.8rem);
+  margin-bottom: 0.75rem;
+}
+
+.how > p:first-of-type {
+  font-size: 1.15rem;
+}
+
+.how h2 {
+  font-size: 1.35rem;
+  margin: 2.25rem 0 0.5rem;
+}
+
+.how p {
+  margin: 0.5rem 0;
+}
+
+.axes {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin: 0.75rem 0;
+  overflow: hidden;
+  background: var(--panel);
+  border: 2px solid var(--ink);
+  border-radius: 12px;
+}
+
+.axes th,
+.axes td {
+  text-align: left;
+  padding: 0.5rem 0.7rem;
+  border-bottom: 1px solid var(--line);
+  vertical-align: top;
+}
+
+.axes tbody tr:last-child > * {
+  border-bottom: 0;
+}
+
+.axes thead th {
+  background: var(--ink);
+  color: var(--panel);
+  font-family: var(--display);
+}
+
+.axes td:last-child {
+  font: 700 1rem var(--display);
+  white-space: nowrap;
+}

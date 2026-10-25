@@ -1,0 +1,491 @@
+/* Players: roster list beside the match card */
+
+.players {
+  display: grid;
+  grid-template-columns: 330px minmax(0, 1fr);
+  gap: 1.75rem;
+  align-items: start;
+}
+
+.roster {
+  position: sticky;
+  top: 86px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  max-height: calc(100vh - 106px);
+}
+
+.count {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+}
+
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0.25rem;
+  overflow-y: auto;
+  background: var(--panel);
+  border: 2px solid var(--ink);
+  border-radius: 12px;
+}
+
+.list a {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 8px;
+  text-decoration: none;
+}
+
+.list a:hover {
+  background: var(--screen);
+}
+
+.list a:hover .sprite {
+  animation: hop 420ms ease-out;
+}
+
+.list a[aria-current='page'] {
+  background: var(--ink);
+  color: var(--panel);
+}
+
+.list a[aria-current='page'] .sub,
+.list a[aria-current='page'] .mon {
+  color: var(--line);
+}
+
+.who {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.name {
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sub {
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+}
+
+.list .mon {
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+  flex-shrink: 0;
+}
+
+.list .mon.none {
+  font-style: italic;
+}
+
+/* Match card */
+
+.card {
+  background: var(--panel);
+  border: 2px solid var(--ink);
+  border-radius: 16px;
+  padding: 1.75rem;
+  box-shadow: 6px 6px 0 var(--ink);
+}
+
+.card .back {
+  display: none;
+}
+
+.card-head h1 {
+  font-size: clamp(2rem, 4vw, 3rem);
+  color: var(--player);
+}
+
+.card-head .meta a {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+/* The reveal sits on its own little Pokédex screen, with the fit ring in the corner */
+.reveal {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 1.5rem;
+  margin: 1.5rem 0 1.25rem;
+  padding: 1.25rem 1.5rem;
+  background: var(--screen) radial-gradient(var(--screen-dot) 1px, transparent 1.5px) 0 0 / 8px 8px;
+  border: 3px solid var(--ink);
+  border-radius: 14px;
+}
+
+.reveal-art {
+  display: grid;
+  place-items: center;
+  width: 188px;
+  height: 188px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #fff 0 45%, #eef2ec 46%);
+  border: 3px solid var(--ink);
+  animation: send-out 450ms steps(6, end) both;
+}
+
+.reveal-art:hover .sprite {
+  animation: hop 420ms ease-out;
+}
+
+.reveal-text {
+  animation: slide-in 400ms 120ms ease-out both;
+}
+
+.reveal-text h2 {
+  font-size: clamp(2.2rem, 4.5vw, 3.2rem);
+  color: var(--mon);
+}
+
+.genus {
+  margin: 0.15rem 0 0.5rem;
+  color: var(--ink-soft);
+}
+
+.fit {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 116px;
+  height: 116px;
+}
+
+.fit svg {
+  position: absolute;
+  inset: 0;
+  transform: rotate(-90deg);
+}
+
+.fit circle {
+  fill: none;
+  stroke-width: 9;
+}
+
+.fit-track {
+  stroke: var(--panel);
+}
+
+.fit-fill {
+  stroke: var(--mon);
+  stroke-linecap: round;
+}
+
+.fit strong {
+  font: 700 2.4rem/1 var(--display);
+  font-variant-numeric: tabular-nums;
+  margin-top: -0.6rem;
+}
+
+.fit span {
+  position: absolute;
+  bottom: 28px;
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+}
+
+.summary {
+  max-width: 72ch;
+  margin: 0 0 1.75rem;
+  padding: 0.8rem 1.1rem;
+  background: var(--note-wash);
+  border: 2px solid var(--note);
+  border-radius: 12px;
+}
+
+/* The mirror chart: the player grows left from the spine, the Pokémon grows right */
+
+.mirror {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.mirror-head,
+.mirror-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 150px minmax(0, 1fr);
+  align-items: center;
+}
+
+.mirror-head {
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+  padding-bottom: 0.25rem;
+}
+
+.mirror-head span:first-child {
+  text-align: right;
+  padding-right: 0.5rem;
+}
+
+.mirror-head span:last-child {
+  padding-left: 0.5rem;
+}
+
+.side {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  height: 34px;
+}
+
+.side.left {
+  justify-content: flex-end;
+}
+
+.track {
+  flex: 1;
+  height: 100%;
+  display: flex;
+}
+
+.side.left .track {
+  justify-content: flex-end;
+}
+
+/* Bars grow out from the spine one row after another when a card opens */
+.side .bar {
+  height: 100%;
+  min-width: 3px;
+  transition: width 350ms var(--pop);
+  animation: grow 600ms calc(250ms + var(--row) * 70ms) var(--pop) both;
+}
+
+.side.left .bar {
+  background: var(--player);
+  border-radius: 7px 0 0 7px;
+  transform-origin: right;
+}
+
+.side.right .bar {
+  background: var(--mon);
+  border-radius: 0 7px 7px 0;
+  transform-origin: left;
+}
+
+.pct {
+  font: 600 1rem var(--display);
+  white-space: nowrap;
+}
+
+.side.left .pct {
+  min-width: 3.2em;
+  text-align: right;
+}
+
+.side.right .pct {
+  min-width: 7.5em;
+}
+
+.pct small {
+  font-family: var(--body);
+}
+
+.spine {
+  height: 100%;
+  border: 0;
+  border-inline: 2px solid var(--ink);
+  background: var(--panel);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  line-height: 1.15;
+}
+
+.spine:hover,
+.spine[aria-expanded='true'] {
+  background: var(--screen);
+}
+
+.spine .skill {
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.spine .stat {
+  font-size: 0.75rem;
+  color: var(--ink-soft);
+}
+
+.mirror-detail dl {
+  margin: 0 0 0.5rem;
+  padding: 0.6rem 1rem;
+  background: var(--screen);
+  border-radius: 8px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 0.3rem 1.5rem;
+  animation: enter 200ms ease-out both;
+}
+
+.mirror-detail dl div {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.mirror-detail dt {
+  color: var(--ink-soft);
+}
+
+.mirror-detail dd {
+  margin: 0;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.runners {
+  margin-top: 2rem;
+}
+
+.runners h3 {
+  font-size: 1.1rem;
+  margin-bottom: 0.6rem;
+}
+
+.runners ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  gap: 0.6rem;
+}
+
+.runners button {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0.5rem 0.4rem;
+  border: 2px solid var(--line);
+  border-radius: 12px;
+  background: var(--panel);
+  transition: transform 180ms var(--pop), border-color 150ms, box-shadow 180ms var(--pop);
+}
+
+.runners button:hover {
+  border-color: var(--ink);
+  transform: translateY(-3px);
+  box-shadow: 0 4px 0 var(--ink);
+}
+
+.runners button:hover .sprite {
+  animation: hop 420ms ease-out;
+}
+
+.runners button.on {
+  border-color: var(--mon);
+  background: #fbe9ea;
+}
+
+.runners button span {
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+@media (max-width: 900px) {
+  .players {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .roster {
+    position: static;
+    max-height: none;
+  }
+
+  .list {
+    overflow: visible;
+  }
+
+  .players:not(.picked) .card,
+  .players.picked .roster {
+    display: none;
+  }
+
+  .card .back {
+    display: inline-flex;
+  }
+}
+
+@media (max-width: 640px) {
+  .card {
+    padding: 1rem;
+    box-shadow: 4px 4px 0 var(--ink);
+  }
+
+  .reveal {
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 0.9rem;
+    padding: 1rem;
+  }
+
+  .reveal-art {
+    width: 116px;
+    height: 116px;
+  }
+
+  .reveal-art .sprite {
+    width: 108px;
+    height: 108px;
+  }
+
+  .fit {
+    grid-column: 1 / -1;
+    justify-self: stretch;
+    width: auto;
+    height: auto;
+    display: flex;
+    gap: 0.5rem;
+    align-items: baseline;
+    justify-content: center;
+    padding-top: 0.75rem;
+    border-top: 2px dashed var(--line);
+  }
+
+  .fit svg {
+    display: none;
+  }
+
+  .fit strong {
+    margin: 0;
+    font-size: 1.8rem;
+  }
+
+  .fit span {
+    position: static;
+  }
+
+  .mirror-head,
+  .mirror-row {
+    grid-template-columns: minmax(0, 1fr) 92px minmax(0, 1fr);
+  }
+
+  .pct small {
+    display: none;
+  }
+
+  .pct {
+    font-size: 0.85rem;
+  }
+
+  .side.left .pct,
+  .side.right .pct {
+    min-width: 2.8em;
+  }
+}

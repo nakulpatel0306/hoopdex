@@ -1,4 +1,4 @@
-import { Fragment, useMemo, useState } from 'react'
+import { Fragment, useMemo, useState, type CSSProperties } from 'react'
 import { percentiles } from '../core/percentile'
 import { AXES, qualified } from '../core/profile'
 import type { Candidate } from '../core/match'
@@ -20,13 +20,13 @@ export function Mirror({ entry, match, players }: { entry: Entry; match: Candida
         <span />
         <span>{match.pokemon.name}, among 493 Pokémon</span>
       </div>
-      {STATS.map((stat) => {
+      {STATS.map((stat, row) => {
         const mine = profile[stat]
         const theirs = match.profile[stat]
         const expanded = open === stat
         return (
           <Fragment key={stat}>
-            <div className="mirror-row">
+            <div className="mirror-row" style={{ '--row': row } as CSSProperties}>
               <div className="side left">
                 <span className="pct">{ordinal(mine)}</span>
                 <span className="track">
@@ -35,7 +35,6 @@ export function Mirror({ entry, match, players }: { entry: Entry; match: Candida
               </div>
               <button
                 className="spine"
-               
                 aria-expanded={expanded}
                 onClick={() => setOpen(expanded ? null : stat)}
                 title={`Show the ${AXES[stat].skill.toLowerCase()} metrics`}

@@ -7,6 +7,7 @@ import pokemon from './data/pokemon.json'
 import weights from './data/weights.json'
 import { Dex } from './ui/Dex'
 import { Games } from './ui/Games'
+import { Home } from './ui/Home'
 import { How } from './ui/How'
 import { Players } from './ui/Players'
 import { href, useRoute, type Route } from './ui/route'
@@ -34,7 +35,7 @@ export default function App() {
 
   return (
     <>
-      <header className="shell">
+      <header className={`shell ${route.view === 'home' ? 'on-home' : ''}`}>
         <a className="brand" href="#/">
           <span className="lens" aria-hidden />
           <span className="lights" aria-hidden>
@@ -52,13 +53,24 @@ export default function App() {
           ))}
         </nav>
       </header>
-      <main className="screen">
+      {/* Keyed by view so each section slides in fresh, but not on every player picked within one */}
+      <main key={route.view} className={`screen screen-${route.view}`}>
+        {route.view === 'home' && <Home league={league} />}
         {route.view === 'players' && <Players league={league} id={route.id} />}
         {route.view === 'teams' && <Teams league={league} team={route.team} />}
         {route.view === 'games' && <Games league={league} id={route.id} />}
         {route.view === 'dex' && <Dex league={league} id={route.id} />}
         {route.view === 'how' && <How league={league} weights={weights as Weights} />}
       </main>
+      <footer className="footer">
+        <span>
+          Built by <a href="https://nakul-patel.dev">Nakul Patel</a> · <a href="https://github.com/nakulpatel0306/hoopdex">Source on GitHub</a>
+        </span>
+        <span>
+          Stats from <a href="https://www.basketball-reference.com/">Basketball-Reference</a>, Pokémon from{' '}
+          <a href="https://pokeapi.co/">PokeAPI</a>. Not affiliated with the NBA or Nintendo.
+        </span>
+      </footer>
     </>
   )
 }
