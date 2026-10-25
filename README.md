@@ -4,12 +4,14 @@ Every NBA player matched to the Pokémon that plays like them, from Bulbasaur to
 
 **[Open it in your browser](https://nakulpatel0306.github.io/hoopdex/)**
 
-![Stephen Curry matched to Deoxys: 99th percentile scoring and shooting on both sides of a mirrored stat chart](docs/match.jpg)
+![The Hoopdex landing page: a red Pokédex whose screen shows Shai Gilgeous-Alexander matched to Slaking, next to a search box](docs/landing.jpg)
 
 Hoopdex turns a player's advanced stats and a Pokémon's base stats into percentiles, then
 finds the Pokémon whose six stats line up closest with the player's. Curry, elite at scoring,
 shooting and playmaking and average on defense, gets Deoxys. Jokić and Wembanyama both get
 Groudon. It's free, needs no account, and runs entirely in your browser.
+
+![Stephen Curry matched to Deoxys: 99th percentile scoring and shooting on both sides of a mirrored stat chart](docs/match.jpg)
 
 ## How a player becomes a Pokémon
 
