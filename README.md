@@ -1,4 +1,4 @@
-# hoopdex
+# Hoopdex - Every NBA Player As A Pokémon
 
 Every NBA player matched to the Pokémon that plays like them, from Bulbasaur to Arceus.
 
@@ -13,7 +13,25 @@ Groudon. It's free, needs no account, and runs entirely in your browser.
 
 ![Stephen Curry matched to Deoxys: 99th percentile scoring and shooting on both sides of a mirrored stat chart](docs/match.jpg)
 
-## How a player becomes a Pokémon
+## At a Glance
+
+- **Stack:** TypeScript, React, Vite, Bun (scripts and tests), GitHub Actions + Pages
+- **Data:** Basketball-Reference and PokeAPI, snapshotted into the repo; no backend or API key
+- **State:** Actively maintained; the Pages workflow pulls in each night's games
+
+## Features
+
+- **Players:** every player with 500+ minutes matched to one of 493 gen 1-4 Pokémon, with a
+  mirrored stat chart, the raw metrics behind each row, and the next closest matches
+- **Games:** every real 2026-27 game replayed as a seeded Gen IV battle, with match stats and
+  a battle MVP
+- **Teams:** each roster as a six-Pokémon party plus its bench
+- **Pokédex:** all 493 Pokémon, filterable by region, with the players matched to each
+- **How it works:** the stat mapping and the backtest behind the weights, in the app
+- **Deep links and mobile:** hash routes for every player, team, game and Pokémon, and a
+  layout that works on a phone
+
+## How a Player Becomes a Pokémon
 
 Each Pokémon stat stands for a basketball skill:
 
@@ -87,12 +105,73 @@ It works on a phone too.
 
 <img src="docs/mobile.jpg" alt="Jokić matched to Groudon on a phone" width="300" />
 
-## Run it yourself
+## Data
 
-```sh
-bun install
-bun dev
+- Player stats: the 2025-26 regular season from
+  [Basketball-Reference](https://www.basketball-reference.com/). Teams are where each player
+  has played in 2026-27, or their last 2025-26 team. Rookies appear once they have a season
+  of minutes.
+- Games: 2026-27 results, line scores and box scores from Basketball-Reference. The weights
+  were fitted on its 2023-24, 2024-25 and 2025-26 seasons.
+- Pokémon stats, names and Platinum sprites: [PokeAPI](https://pokeapi.co/). Base stats
+  reflect the latest games, so a few early Pokémon carry their Generation VI boosts.
+
+Pokémon is © Nintendo, Game Freak and The Pokémon Company. Hoopdex is an unofficial fan
+project and isn't affiliated with them or the NBA.
+
+## Project Structure
+
 ```
+.
+├── src/
+│   ├── core/            # Matching logic, no UI
+│   │   ├── percentile.ts  # Mid-rank percentiles
+│   │   ├── profile.ts     # Player and Pokémon stat profiles, metric weights
+│   │   ├── match.ts       # Weighted RMS gap and fit score
+│   │   ├── league.ts      # Builds every match from the snapshot
+│   │   ├── battle.ts      # Gen IV battle engine seeded by the game
+│   │   ├── teams.ts       # Rosters and team abbreviations
+│   │   └── types.ts
+│   ├── data/            # Snapshot: players.json, pokemon.json, weights.json
+│   ├── ui/              # React views: Home, Players, Teams, Games, Dex, How
+│   ├── styles/          # One stylesheet per view
+│   ├── App.tsx
+│   └── main.tsx
+├── scripts/
+│   ├── snapshot.ts      # Refreshes src/data from Basketball-Reference and PokeAPI
+│   ├── bbref.ts         # Basketball-Reference fetching and parsing
+│   ├── games.ts         # Fetches results and box scores into public/games.json
+│   └── reliability.ts   # Fits and backtests the weights
+├── public/              # games.json, favicon, link preview image
+├── tests/               # Matching, battle engine and routing tests
+└── docs/                # README screenshots
+```
+
+## Running Locally
+
+Needs [Bun](https://bun.sh).
+
+1. Clone the repo:
+   ```sh
+   git clone https://github.com/nakulpatel0306/hoopdex.git
+   cd hoopdex
+   ```
+2. Install and start the dev server:
+   ```sh
+   bun install
+   bun dev
+   ```
+3. Run the tests:
+   ```sh
+   bun test
+   ```
+   They check the percentile math, the weights, that every player's match really is the
+   closest Pokémon, and the battle engine (type chart, stat formulas, lineups, and that a game
+   always replays the same).
+
+`bun run lint`, `bun run typecheck` and `bun run build` are there too.
+
+### Refreshing the data
 
 The data is a snapshot in `src/data`, so there's no server or API key. To refresh it:
 
@@ -113,24 +192,6 @@ bun run weights   # refit and backtest the weights; add --write to save them
 `bun run games` only fetches games it doesn't have yet. The Pages workflow runs it every
 morning, so the site picks up the night's games on its own.
 
-`bun test` checks the percentile math, the weights, that every player's match really is the
-closest Pokémon, and the battle engine (type chart, stat formulas, lineups, and that a game
-always replays the same).
-
-## Data
-
-- Player stats: the 2025-26 regular season from
-  [Basketball-Reference](https://www.basketball-reference.com/). Teams are where each player
-  has played in 2026-27, or their last 2025-26 team. Rookies appear once they have a season
-  of minutes.
-- Games: 2026-27 results, line scores and box scores from Basketball-Reference. The weights
-  were fitted on its 2023-24, 2024-25 and 2025-26 seasons.
-- Pokémon stats, names and Platinum sprites: [PokeAPI](https://pokeapi.co/). Base stats
-  reflect the latest games, so a few early Pokémon carry their Generation VI boosts.
-
-Pokémon is © Nintendo, Game Freak and The Pokémon Company. Hoopdex is an unofficial fan
-project and isn't affiliated with them or the NBA.
-
 ## License
 
-MIT
+MIT, see [LICENSE](LICENSE).
